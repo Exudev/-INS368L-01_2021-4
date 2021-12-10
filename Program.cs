@@ -1,45 +1,56 @@
 ﻿using System;
 
-namespace KataVectorsandAngles
+namespace TemperatureApp
 {
    public class Program
     {
         static void Main(string[] args)
         {
-           
-        }
-
-        public class Vector
-        {
-           private int _posx;
-           private int _posy; 
-          public Vector(int posx, int posy)
-            {
-                this._posx = posx;
-                this._posy = posy;
-
-            }
-            public double Magnitude()
-            {
-                double result = Math.Sqrt(Math.Pow(this._posx, 2) + Math.Pow(this._posy,2));
-                return result;
-            }
-            public double DotProduct(Vector vector)
-            {
-                double result = (this._posx * vector._posx) + (this._posy * vector._posy);
-
-                return result;
             
-            }
-            public double AngleBetween(Vector vector)
-            {
-                double result = Math.Acos((DotProduct(vector)) / ((this.Magnitude()) * (vector.Magnitude())));
-                return result;
-            }
-
-
-
         }
-       
+        //Clase y constructor
+        public class Temperature
+        {
+            private string _type;
+            private double _grades;
+            public Temperature(string type, double grades)
+            {
+                this._type = type;
+                this._grades = grades;
+            }
+            //Conversiones desde Fah
+            public static double FahToKel(Temperature temp)
+            {
+                double kelvin = (temp._grades-32) * 5 / 9 + 273.15;
+                return kelvin;
+            }
+            public static double FahToCel(Temperature temp)
+            {
+                double cel = (temp._grades - 32) * 5 / 9;
+                return cel;
+            }
+            //Conversiones desde Cel
+            public static double CelToKel(Temperature temp)
+            {
+                double kelvin = temp._grades + 273.15;
+                return kelvin;
+            }
+            public static double CelToFah(Temperature temp)
+            {
+                double Fah = (temp._grades * 9 / 5) + 32;
+                return Fah;
+            }
+            //Conversiones desde Kel
+            public static double KelToCel(Temperature temp)
+            {
+                double cel = temp._grades - 273.15;
+                return cel;
+            }
+            public static double KelToFah(Temperature temp)
+            {
+                double fah = (temp._grades - 273.15) * 9 / 5 + 32;
+                return fah;
+            }
+        }
     }
 }
