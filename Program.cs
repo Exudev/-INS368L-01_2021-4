@@ -1,56 +1,100 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
 
-namespace TemperatureApp
+namespace KataAnagrama1096394
 {
-   public class Program
+    class Program
     {
         static void Main(string[] args)
         {
-            
+
+          
         }
-        //Clase y constructor
-        public class Temperature
+        public static List<string> leyendoArchivo(string path)
+
         {
-            private string _type;
-            private double _grades;
-            public Temperature(string type, double grades)
+            List<string> result = new List<string>();
+            string line;
+            if (!File.Exists(path))
             {
-                this._type = type;
-                this._grades = grades;
+                throw new FileNotFoundException();
             }
-            //Conversiones desde Fah
-            public static double FahToKel(Temperature temp)
+            StreamReader file = new StreamReader(path);
+            while ((line = file.ReadLine()) != null)
             {
-                double kelvin = (temp._grades-32) * 5 / 9 + 273.15;
-                return kelvin;
+                result.Add(line);
             }
-            public static double FahToCel(Temperature temp)
+
+            return result;
+        }
+        private static bool RevisarAnagrama(string palabra1, string palabra2)
+        {
+            if (palabra1 == null || palabra2 == null)
             {
-                double cel = (temp._grades - 32) * 5 / 9;
-                return cel;
+                throw new ArgumentNullException();
             }
-            //Conversiones desde Cel
-            public static double CelToKel(Temperature temp)
+
+            if (palabra1.Length != palabra2.Length)
             {
-                double kelvin = temp._grades + 273.15;
-                return kelvin;
+                return false;
             }
-            public static double CelToFah(Temperature temp)
+
+            else
             {
-                double Fah = (temp._grades * 9 / 5) + 32;
-                return Fah;
+                palabra1 = anagramHash(palabra1);
+                palabra2 = anagramHash(palabra2);
+                if (palabra1 == palabra2)
+                {
+                    return true;
+                }
+                else
+                    return false;
             }
-            //Conversiones desde Kel
-            public static double KelToCel(Temperature temp)
+        }
+        private static string anagramHash(string input)
+        {
+            char[] temp = input.ToLowerInvariant().ToCharArray();
+            Array.Sort(temp);
+            return new string(temp);
+        }
+        private static Dictionary<string, string> quitarNoAnagramas(Dictionary<string, string> anagrams)
+        {
+            foreach (var anagram in anagrams)
             {
-                double cel = temp._grades - 273.15;
-                return cel;
+                if (RevisarAnagrama(anagram.Key, anagram.Value))
+                {
+                    anagrams.Remove(anagram.Key);
+                }
             }
-            public static double KelToFah(Temperature temp)
+            return anagrams;
+        }
+        public static Dictionary<string, string> encontrarAnagrama(List<string> listadoDePalabras)
+        {
+            Dictionary<string, string> anagrams = new Dictionary<string, string>();
+
+            foreach (var palabra in listadoDePalabras)
             {
-                double fah = (temp._grades - 273.15) * 9 / 5 + 32;
-                return fah;
+                string key = anagramHash(palabra);
+                if (anagrams.ContainsKey(key))
+                {
+                    string value = anagrams[key];
+                    anagrams[key] = string.Concat(value, ',', palabra);
+                }
+                else
+                {
+                    anagrams.Add(key, palabra);
+                }
             }
+            anagrams = quitarNoAnagramas(anagrams);
+            return anagrams;
+        }
+        public static string Normalize(string entrada)
+        {
+            
+            string salida;
+            salida = entrada.ToLower();
+            return salida;
         }
     }
 }
